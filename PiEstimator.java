@@ -11,21 +11,12 @@ public class PiEstimator{
     public double getPiEstimate(){
 
         int in = 0;
-        
-        // for(int i = 0; i < numPoints; i++){
-        //     double x = Math.random()-0.5;
-        //     double y = Math.random()-0.5; 
-
-        //     if(x*x + y*y <= 0.25){
-        //         in++;
-        //     }
-        // }
 
         for(int i = 0; i < numPoints; i++){
-            double x = Math.random()*2-1;
-            double y = Math.random()*2-1; 
+            double x = Math.random()-0.5;
+            double y = Math.random()-0.5; 
 
-            if(Math.sqrt(x*x + y*y) <= 1){
+            if(x*x + y*y <= 0.25){
                 in++;
             }
         }
@@ -35,7 +26,7 @@ public class PiEstimator{
 
     public static void main(String[] args){
 
-        int NUM_POINTS = 1_073_741_824;
+        int NUM_POINTS = 10_048_576;
         int n = 1;
 
         System.out.println("Running Monte Carlo simulation with n = " + NUM_POINTS + " samples...\n");
