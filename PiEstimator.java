@@ -1,24 +1,40 @@
 public class PiEstimator{
     
-    public static long numPoints;
-    public static int numThreads;
+    public long numPoints;
+    public int numThreads;
 
-    public PiEstimator(long num_Points, int num_Threads){
-        numPoints = num_Points;
-        numThreads = num_Threads;
+    public PiEstimator(long numPoints, int numThreads){
+        this.numPoints = numPoints;
+        this.numThreads = numThreads;
     }
 
     public double getPiEstimate(){
 
-        int in = 0;
+        Thread[] threads = new Thread[numThreads];
+        long[] outputs = new long[numThreads];
+        long numThreadPoints = numPoints / numThreads;
 
-        for(int i = 0; i < numPoints; i++){
-            double x = Math.random()-0.5;
-            double y = Math.random()-0.5; 
+        for(int i = 0; i < numThreads; i++){
+            threads[i] = new Thread(new PiThread(numThreadPoints, i, outputs));
+        }
 
-            if(x*x + y*y <= 0.25){
-                in++;
+        for(Thread t : threads){
+            t.start();
+        }
+
+        for (Thread t : threads) {
+            try {
+                t.join();
             }
+            catch (InterruptedException ignored) {
+                // don't care if t was interrupted
+            }
+        }
+
+        long in = 0;
+
+        for(long output : outputs){
+            in += output;
         }
 
         return 4.0 * in / numPoints;
