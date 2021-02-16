@@ -1,27 +1,38 @@
 public class PiEstimator{
     
+    // variable to store number of points and threads used
     public long numPoints;
     public int numThreads;
 
+    // contructor
     public PiEstimator(long numPoints, int numThreads){
         this.numPoints = numPoints;
         this.numThreads = numThreads;
     }
 
+    // function that splits job of randomly making points to threads, 
+    // then calculating pi
     public double getPiEstimate(){
 
+        // array to store threads
         Thread[] threads = new Thread[numThreads];
-        long[] outputs = new long[numThreads];
+        // number of points calculated per thread -- an even split among each thread
         long numThreadPoints = numPoints / numThreads;
+        // shared array to store number of "hits" from each thread
+        long[] outputs = new long[numThreads];
 
+        // create the number of threads specified by numThreads
         for(int i = 0; i < numThreads; i++){
             threads[i] = new Thread(new PiThread(numThreadPoints, i, outputs));
         }
 
+        // start all the threads
         for(Thread t : threads){
             t.start();
         }
 
+        // wait for all the threads to finish 
+        // note: code chunk from Multithreading notes from class webpage
         for (Thread t : threads) {
             try {
                 t.join();
@@ -31,33 +42,14 @@ public class PiEstimator{
             }
         }
 
-        long in = 0;
-
+        // add the number of hits from each thread
+        long hits = 0;
         for(long output : outputs){
-            in += output;
+            hits += output;
         }
 
-        return 4.0 * in / numPoints;
+        // calculate and return estimate of pi
+        return 4.0 * hits / numPoints;
     }
 
-    public static void main(String[] args){
-
-        int NUM_POINTS = 10_048_576;
-        int n = 1;
-
-        System.out.println("Running Monte Carlo simulation with n = " + NUM_POINTS + " samples...\n");
-	    System.out.println( "n threads | pi estimate | time (ms)\n"
-			                +"-----------------------------------");
-
-        PiEstimator pe = new PiEstimator(NUM_POINTS, n);
-	    
-	    long start = System.nanoTime();
-	    
-	    double est = pe.getPiEstimate();
-	    
-	    long end = System.nanoTime();
-
-	    System.out.printf("%9d |     %.5f | %6d\n", n, est, (end - start) / 1_000_000);  
-    }
-
-}
+} // PiEstimator
