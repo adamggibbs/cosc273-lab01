@@ -10,8 +10,11 @@ public class PiEstimator{
         this.numThreads = numThreads;
     }
 
-    // function that splits job of randomly making points to threads, 
-    // then calculating pi
+    // compute the estimate of pi
+    // 1) create the number of desired threads using PiThread class
+    // 2) determine the number of points for each thread to calculate
+    // 3) start all threads, then wait for them to all finish
+    // 4) sum number of hits from each thread then use that to calucalte pi
     public double getPiEstimate(){
 
         // array to store threads
@@ -21,7 +24,7 @@ public class PiEstimator{
         // shared array to store number of "hits" from each thread
         long[] outputs = new long[numThreads];
 
-        // create the number of threads specified by numThreads
+        // create the number of PiThread threads specified by numThreads
         for(int i = 0; i < numThreads; i++){
             threads[i] = new Thread(new PiThread(numThreadPoints, i, outputs));
         }

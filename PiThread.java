@@ -22,14 +22,18 @@ public class PiThread implements Runnable{
         // variable to store number of hits 
         long hits = 0;
 
-        // caluclate numThreadPoints amount of random points and see if it's inside the circle
+        // randomly determine numThreadPoints amount of random points
+        // then see if it's inside the circle
+        // only use the first quadrent portion of unit circle,
+        // because it reduces the number of operations needed
+        // but still maintains accuracy because circle to square proportions remain the same
         for(int i = 0; i < numThreadPoints; i++){
             // find random double in [0.5,0.5)
             double x = ThreadLocalRandom.current().nextDouble();
             double y = ThreadLocalRandom.current().nextDouble(); 
 
-            // use a^2 + b^2 <= r^2 as criteria for being in circle
-            // if point is in circle, increment hits
+            // use a^2 + b^2 <= r^2 as criteria for being in quarter-circle
+            // if point is in quarter-circle, increment hits
             if(x*x + y*y <= 1){
                 hits++;
             }
