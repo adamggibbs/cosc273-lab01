@@ -25,12 +25,12 @@ public class PiThread implements Runnable{
         // caluclate numThreadPoints amount of random points and see if it's inside the circle
         for(int i = 0; i < numThreadPoints; i++){
             // find random double in [0.5,0.5)
-            double x = ThreadLocalRandom.current().nextDouble()-0.5;
-            double y = ThreadLocalRandom.current().nextDouble()-0.5; 
+            double x = ThreadLocalRandom.current().nextDouble();
+            double y = ThreadLocalRandom.current().nextDouble(); 
 
             // use a^2 + b^2 <= r^2 as criteria for being in circle
             // if point is in circle, increment hits
-            if(x*x + y*y <= 0.25){
+            if(x*x + y*y <= 1){
                 hits++;
             }
         }
